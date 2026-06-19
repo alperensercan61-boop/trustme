@@ -27,37 +27,43 @@ export default function Home() {
     count: "248 işletme",
     image:
       "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop",
-  },
+ href: "/category/restoran",
+    },
   {
     name: "Kafe",
     count: "183 işletme",
     image:
       "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1200&auto=format&fit=crop",
-  },
+   href: "#",
+    },
   {
     name: "Otel",
     count: "65 işletme",
     image:
       "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
-  },
+   href: "#",
+    },
   {
     name: "Diş Kliniği",
     count: "91 işletme",
     image:
       "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1200&auto=format&fit=crop",
-  },
+   href: "#",
+    },
   {
     name: "Kuaför",
     count: "140 işletme",
     image:
       "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format&fit=crop",
-  },
+   href: "#",
+    },
   {
     name: "Oto Servis",
     count: "72 işletme",
     image:
       "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=1200&auto=format&fit=crop",
-  },
+   href: "#",
+    },
 ];
 
   const places = [
@@ -168,7 +174,8 @@ export default function Home() {
 
   <div className="mt-10 grid gap-6 md:grid-cols-3">
     {categories.map((cat) => (
-      <div
+  <Link
+    href={cat.href}
         key={cat.name}
         className="group relative h-[260px] overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
       >
@@ -190,7 +197,7 @@ export default function Home() {
             Güven skoru yüksek işletmeleri keşfet.
           </p>
         </div>
-      </div>
+      </Link>
     ))}
   </div>
 </section>
