@@ -22,12 +22,42 @@ export default function Home() {
   }, []);
 
   const categories = [
-  { name: "Restoran", count: "248 işletme", gradient: "from-orange-200 to-orange-500" },
-  { name: "Kafe", count: "183 işletme", gradient: "from-amber-100 to-orange-400" },
-  { name: "Otel", count: "65 işletme", gradient: "from-blue-100 to-blue-900" },
-  { name: "Diş Kliniği", count: "91 işletme", gradient: "from-sky-100 to-blue-700" },
-  { name: "Kuaför", count: "140 işletme", gradient: "from-orange-100 to-slate-800" },
-  { name: "Oto Servis", count: "72 işletme", gradient: "from-slate-200 to-blue-950" },
+  {
+    name: "Restoran",
+    count: "248 işletme",
+    image:
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Kafe",
+    count: "183 işletme",
+    image:
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Otel",
+    count: "65 işletme",
+    image:
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Diş Kliniği",
+    count: "91 işletme",
+    image:
+      "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Kuaför",
+    count: "140 işletme",
+    image:
+      "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Oto Servis",
+    count: "72 işletme",
+    image:
+      "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=1200&auto=format&fit=crop",
+  },
 ];
 
   const places = [
@@ -119,28 +149,46 @@ export default function Home() {
       </section>
 
       {/* CATEGORIES */}
-     <section className="mx-auto max-w-7xl px-6 py-20">
-  <div>
-    <p className="font-medium text-orange-500">Kategoriler</p>
-    <h2 className="mt-2 text-4xl font-semibold tracking-tight text-blue-950">
-      Ne arıyorsun?
-    </h2>
+<section className="mx-auto max-w-7xl px-6 py-20">
+  <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+    <div>
+      <p className="font-medium text-orange-500">Kategoriler</p>
+      <h2 className="mt-2 text-4xl font-semibold tracking-tight text-blue-950">
+        Ne arıyorsun?
+      </h2>
+      <p className="mt-3 max-w-2xl text-slate-600">
+        En çok aranan işletme kategorilerini Trust Score ile keşfet.
+      </p>
+    </div>
+
+    <button className="w-fit rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-blue-950 shadow-sm transition hover:border-orange-300 hover:text-orange-500">
+      Tüm kategoriler
+    </button>
   </div>
 
   <div className="mt-10 grid gap-6 md:grid-cols-3">
     {categories.map((cat) => (
       <div
-  key={cat.name}
-  className="group overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-sm hover:shadow-xl transition"
->
-        <div className={`h-[100px] bg-gradient-to-br ${cat.gradient}`} />
+        key={cat.name}
+        className="group relative h-[260px] overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
+      >
+        <div
+          className="absolute inset-0 bg-cover bg-center transition duration-500 group-hover:scale-110"
+          style={{ backgroundImage: `url(${cat.image})` }}
+        />
 
-        <div className="p-6">
-          <h3 className="text-lg font-semibold text-blue-950">
-            {cat.name}
-          </h3>
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-950/85 via-blue-950/25 to-transparent" />
 
-          <p className="mt-1 text-sm text-slate-500">{cat.count}</p>
+        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+          <div className="mb-4 w-fit rounded-full bg-white/20 px-3 py-1 text-xs font-medium backdrop-blur">
+            {cat.count}
+          </div>
+
+          <h3 className="text-2xl font-semibold">{cat.name}</h3>
+
+          <p className="mt-2 text-sm text-white/80">
+            Güven skoru yüksek işletmeleri keşfet.
+          </p>
         </div>
       </div>
     ))}
