@@ -1,35 +1,16 @@
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
-export default function RestoranCategoryPage() {
-  const restaurants = [
-    {
-      name: "Mira Steak House",
-      area: "Kadıköy",
-      distance: "1.2 km",
-      googleRating: "4.8",
-      reviews: "2.400+",
-      score: 96,
-      href: "/business/mira-steak-house",
-    },
-    {
-      name: "Luna Grill",
-      area: "Beşiktaş",
-      distance: "2.4 km",
-      googleRating: "4.7",
-      reviews: "1.850+",
-      score: 93,
-      href: "/business/mira-steak-house",
-    },
-    {
-      name: "Agora Burger",
-      area: "Şişli",
-      distance: "3.1 km",
-      googleRating: "4.6",
-      reviews: "3.100+",
-      score: 91,
-      href: "/business/mira-steak-house",
-    },
-  ];
+export default async function RestoranCategoryPage() {
+  const { data: restaurants, error } = await supabase
+    .from("businesses")
+    .select("*")
+    .eq("type", "Restoran")
+    .order("trust_score", { ascending: false });
+
+  if (error) {
+    return <main className="p-10">Veriler alınamadı.</main>;
+  }
 
   return (
     <main className="min-h-screen bg-[#f8fafc] text-slate-950">
@@ -58,23 +39,26 @@ export default function RestoranCategoryPage() {
               Önerilen restoranlar
             </h2>
             <p className="mt-2 text-slate-600">
-              AI analizine göre en güvenilir seçenekler.
+              Supabase veritabanından gelen restoranlar.
             </p>
           </div>
 
           <button className="w-fit rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-blue-950 shadow-sm">
-            En yüksek skora göre sırala
+            En yüksek skora göre sıralı
           </button>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {restaurants.map((place) => (
+          {(restaurants ?? []).map((place) => (
             <Link
-              key={place.name}
-              href={place.href}
+              key={place.id}
+              href={`/business/${place.slug}`}
               className="group rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-2xl"
             >
-              <div className="mb-6 h-44 rounded-[1.5rem] bg-gradient-to-br from-orange-200 via-orange-500 to-blue-950" />
+              <div
+                className="mb-6 h-44 rounded-[1.5rem] bg-cover bg-center"
+                style={{ backgroundImage: `url(${place.image_url})` }}
+              />
 
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -82,23 +66,23 @@ export default function RestoranCategoryPage() {
                     {place.name}
                   </h3>
                   <p className="mt-1 text-slate-500">
-                    {place.area} · {place.distance}
+                    {place.city} · {place.distance}
                   </p>
                 </div>
 
                 <div className="rounded-2xl bg-orange-500 px-5 py-4 text-center text-white">
-                  <div className="text-3xl font-bold">{place.score}</div>
+                  <div className="text-3xl font-bold">{place.trust_score}</div>
                   <div className="text-xs uppercase tracking-wide">Trust</div>
                 </div>
               </div>
 
               <div className="mt-6 flex gap-4 text-sm text-slate-600">
-                <span>⭐ {place.googleRating}</span>
-                <span>💬 {place.reviews}</span>
+                <span>⭐ {place.google_rating}</span>
+                <span>💬 {place.review_count}</span>
               </div>
 
               <p className="mt-5 leading-7 text-slate-600">
-                Yorum kalitesi, puan tutarlılığı ve memnuniyet sinyalleri güçlü.
+                {place.comment}
               </p>
 
               <div className="mt-6 font-medium text-orange-500">

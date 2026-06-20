@@ -2,6 +2,20 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+type Place = {
+  id: number;
+  name: string;
+  type: string;
+  city: string;
+  distance: string;
+  google_rating: number;
+  review_count: string;
+  trust_score: number;
+  comment: string;
+  image_url: string;
+  slug: string;
+};
 
 export default function Home() {
   const [location, setLocation] = useState({
@@ -10,16 +24,32 @@ export default function Home() {
   });
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setLocation({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      },
-      () => console.log("Konum izni verilmedi.")
-    );
-  }, []);
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      setLocation({
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      });
+    },
+    () => console.log("Konum izni verilmedi.")
+  );
+}, []);
+
+useEffect(() => {
+  async function testDb() {
+    const { data, error } = await supabase
+      .from("businesses")
+      .select("*");
+
+    if (data) {
+  setPlaces(data);
+}
+    console.log("SUPABASE ERROR:", error);
+  }
+
+  testDb();
+}, []);
+
 
   const categories = [
   {
@@ -66,32 +96,7 @@ export default function Home() {
     },
 ];
 
-  const places = [
-    {
-      name: "Mira Steak House",
-      type: "Restoran",
-      distance: "1.2 km",
-      score: 96,
-      comment:
-        "AI analizine göre yorumların büyük bölümü doğal, puan dağılımı tutarlı ve müşteri memnuniyeti son aylarda yüksek seviyede.",
-    },
-    {
-      name: "Luna Coffee",
-      type: "Kafe",
-      distance: "850 m",
-      score: 94,
-      comment:
-        "Kullanıcılar özellikle ortam, servis hızı ve ürün kalitesinden memnun. Sahte yorum riski düşük görünüyor.",
-    },
-    {
-      name: "Nova Dental",
-      type: "Diş Kliniği",
-      distance: "2.1 km",
-      score: 91,
-      comment:
-        "Yorumlarda doktor ilgisi, hijyen ve randevu düzeni öne çıkıyor. Olumsuz yorum oranı düşük.",
-    },
-  ];
+  const [places, setPlaces] = useState<Place[]>([]);
 
   return (
     <main className="min-h-screen bg-[#f8fafc] text-slate-950">
@@ -228,7 +233,7 @@ export default function Home() {
                 </div>
 
                 <div className="rounded-2xl bg-orange-500 px-5 py-4 text-center text-white">
-                  <div className="text-3xl font-bold">{place.score}</div>
+                  <div className="text-3xl font-bold">{place.trust_score}</div>
                   <div className="text-xs uppercase tracking-wide">Trust</div>
                 </div>
               </div>
@@ -236,7 +241,7 @@ export default function Home() {
               <p className="leading-7 text-slate-600">{place.comment}</p>
 
               <Link
-  href="/business/mira-steak-house"
+  href={`/business/${place.slug}`}
   className="mt-6 block w-full rounded-2xl bg-blue-950 px-5 py-4 text-center font-medium text-white transition hover:bg-orange-500"
 >
   AI Analizini Gör
